@@ -10,7 +10,14 @@ class OutOfStock(Exception):
 
 def allocate(line: OrderLine, batches: List[Batch]) -> str:
     try:
-        batch = next(b for b in sorted(batches) if b.can_allocate(line))
+        # batch = next(b for b in sorted(batches) if b.can_allocate(line))
+        batch = None
+        for b in sorted(batches):
+            if b.can_allocate(line):
+                batch = b
+                break
+        if not batch:
+            raise OutOfStock(f"Out of stock for sku {line.sku}")
         batch.allocate(line)
         return batch.reference
     except StopIteration:
@@ -44,6 +51,7 @@ class Batch:
         return hash(self.reference)
 
     def __gt__(self, other):
+        # batch_1 > batch_2
         if self.eta is None:
             return False
         if other.eta is None:
