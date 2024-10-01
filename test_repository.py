@@ -25,6 +25,8 @@ def insert_order_line(session):
             ' VALUES ("order1", "GENERIC-SOFA", 12)'
         )
     )
+    # We use parameter binding to avoid SQL injection rather
+    # than interpolating the values directly into the SQL string (with f-strings).
     [[orderline_id]] = session.execute(
         text("SELECT id FROM order_lines WHERE orderid=:orderid AND sku=:sku"),
         dict(orderid="order1", sku="GENERIC-SOFA"),
