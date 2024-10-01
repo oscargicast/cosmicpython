@@ -1,8 +1,11 @@
 test:
-	pytest --tb=short
+	pytest --tb=short -s $(filter-out $@,$(MAKECMDGOALS))
 
 watch-tests:
 	ls *.py | entr pytest --tb=short
 
 black:
 	black -l 86 $$(find * -name '*.py')
+
+%:
+	@:
