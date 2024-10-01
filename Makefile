@@ -1,5 +1,5 @@
 test:
-	pytest --tb=short -s $(filter-out $@,$(MAKECMDGOALS))
+	pytest -s $(filter-out $@,$(MAKECMDGOALS))
 
 watch-tests:
 	ls *.py | entr pytest --tb=short
