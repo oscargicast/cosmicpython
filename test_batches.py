@@ -57,3 +57,13 @@ def test_can_only_deallocate_allocated_lines():
     batch, unallocated_line = make_batch_and_line("DECORATIVE-TRINKET", 20, 2)
     batch.deallocate(unallocated_line)
     assert batch.available_quantity == 20
+
+
+def test_equal_references_in_batches():
+    batch_1 = Batch("batch-001", "SMALL-TABLE", qty=20, eta=date.today())
+    batch_2 = Batch("batch-001", "LARGE-TABLE", qty=10, eta=None)
+    assert batch_1 == batch_2
+
+    batch_3 = Batch("batch-001", "SMALL-TABLE", qty=20, eta=date.today())
+    batch_4 = Batch("batch-002", "SMALL-TABLE", qty=20, eta=date.today())
+    assert batch_3 != batch_4

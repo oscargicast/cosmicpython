@@ -67,6 +67,7 @@ def test_saving_allocations(session):
     batch.allocate(line)
     session.add(batch)
     session.commit()
+    # Get all allocations.
     rows = list(
         session.execute(text('SELECT orderline_id, batch_id FROM "allocations"'))
     )
