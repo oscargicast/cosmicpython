@@ -58,3 +58,25 @@ def determine_actions(source_hashes, dest_hashes, source_folder, dest_folder):
     for sha, filename in dest_hashes.items():
         if sha not in source_hashes:
             yield "DELETE", dest_folder / filename
+
+
+def determine_actions_2(source_hashes, dest_hashes, source_folder, dest_folder):
+    actions = []
+    for sha, filename in source_hashes.items():
+        if sha not in dest_hashes:
+            sourcepath = Path(source_folder) / filename
+            destpath = Path(dest_folder) / filename
+            actions.append(("COPY", sourcepath, destpath))
+            # yield "COPY", sourcepath, destpath
+
+        elif dest_hashes[sha] != filename:
+            olddestpath = Path(dest_folder) / dest_hashes[sha]
+            newdestpath = Path(dest_folder) / filename
+            actions.append(("MOVE", olddestpath, newdestpath))
+            # yield "MOVE", olddestpath, newdestpath
+
+    for sha, filename in dest_hashes.items():
+        if sha not in source_hashes:
+            # yield "DELETE", dest_folder / filename
+            actions.append(("DELETE", dest_folder / filename))
+    return actions

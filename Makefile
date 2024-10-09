@@ -1,5 +1,5 @@
 test:
-	pytest --tb=short
+	pytest -s --tb=short
 
 watch-tests:
 	ls *.py | entr pytest --tb=short
