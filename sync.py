@@ -25,7 +25,7 @@ def sync(source, dest):
 BLOCKSIZE = 65536
 
 
-def hash_file(path):
+def hash_file(path: Path) -> str:
     hasher = hashlib.sha1()
     with path.open("rb") as file:
         buf = file.read(BLOCKSIZE)
@@ -35,7 +35,7 @@ def hash_file(path):
     return hasher.hexdigest()
 
 
-def read_paths_and_hashes(root):
+def read_paths_and_hashes(root) -> dict[str, str]:
     hashes = {}
     for folder, _, files in os.walk(root):
         for fn in files:
@@ -43,14 +43,19 @@ def read_paths_and_hashes(root):
     return hashes
 
 
-def determine_actions(source_hashes, dest_hashes, source_folder, dest_folder):
+def determine_actions(
+    source_hashes: dict[str, str],
+    dest_hashes: dict[str, str],
+    source_folder: str,
+    dest_folder: str,
+):
     for sha, filename in source_hashes.items():
         if sha not in dest_hashes:
             sourcepath = Path(source_folder) / filename
             destpath = Path(dest_folder) / filename
             yield "COPY", sourcepath, destpath
-
         elif dest_hashes[sha] != filename:
+            # sha in dest_hashes
             olddestpath = Path(dest_folder) / dest_hashes[sha]
             newdestpath = Path(dest_folder) / filename
             yield "MOVE", olddestpath, newdestpath

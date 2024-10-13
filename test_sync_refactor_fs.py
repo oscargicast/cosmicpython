@@ -1,6 +1,6 @@
 import tempfile
 
-from sync_refactor import FileSystem, sync
+from sync_refactor import LocalFileSystem, sync
 from pathlib import Path
 
 
@@ -11,7 +11,7 @@ def test_when_a_single_file_exists_in_the_source_but_not_the_destination():
     content = "I am a very useful file"
     (Path(source) / "fn1").write_text(content)
 
-    fs = FileSystem()
+    fs = LocalFileSystem()
     sync(source, dest, filesystem=fs)
     assert fs.get_actions() == [
         (

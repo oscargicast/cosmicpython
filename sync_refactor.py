@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Protocol
 
 
-class FileSystem:
+class LocalFileSystem:
     def __init__(self):
         self.actions = []
 
